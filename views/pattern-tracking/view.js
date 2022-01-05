@@ -145,7 +145,7 @@
   }
   
   getStatus(_file) {
-    let status = 'Needs attention'
+    let status = 'needs attention'
     if (_file.file.path.contains('WIP')) {
       status = this.getIncompleteStatus(_file)
     } else {
@@ -170,7 +170,7 @@
     let connected = this.hasConnections(_file)
     if (!connected) {
       status = 'close'
-    } else if (connected && _file.connections['thought'].size === 0) {
+    } else if (connected && _file.connections[this._m.subtypes[1]].size === 0) {
       status = 'ready'
     } if (connected && (publish === true || publish === 'yes' || publish === 'published')) {
       status = 'done'
@@ -205,7 +205,7 @@ dv.table(
       s.Subtype ? s.Subtype : s.Type,
       pattern.getWaitingTime(s),
       `<span class="${pattern.getStatus(s)} ${pattern.isWaiting(s)}">\u2766</span>`,
-      s.connections['side-story'].size,
-      s.connections['thought'].size
+      s.connections[pattern._m.subtypes[0]].size,
+      s.connections[pattern._m.subtypes[1]].size
     ])
 )
