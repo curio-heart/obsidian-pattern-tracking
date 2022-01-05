@@ -2,6 +2,17 @@
  * Pattern Tracking v0.2.0
  * Automated tracking for story progress based on location and link data.
  */
+
+/* Using directly inside a `dataviewjs` block?
+ *  Uncomment this section and replace the data with what you need!
+ */
+// const input = {
+//   filter: '-"~META"',
+//   typekey: 'Type',
+//   type: 'story',
+//   subtypekey: 'Subtype',
+//   subtypes: ['side-story', 'thought']
+// }
   
  class Pattern {
   constructor(_filterString, _typeKey, _type, _subtypeKey, _subtypes) {
@@ -169,17 +180,6 @@
     return status
   }
 }
-
-/* Using directly inside a `dataviewjs` block?
- *  Uncomment this section and replace the data with what you need!
- */
-// const input = {
-//   filter: '-"~META"',
-//   typekey: 'Type',
-//   type: 'story',
-//   subtypekey: 'Subtype',
-//   subtypes: ['side-story', 'thought']
-// }
   
 let pattern = new Pattern(input.filter, input.typekey, input.type, input.subtypekey, input.subtypes)
 
@@ -199,7 +199,6 @@ dv.table(
     "ῼ"
   ],
   pattern.getFilesOfType('primary')
-    // .mutate(s => pattern.prep(s))
     .sort(s => s.file.name)
     .map(s => [
       s.file.link,
