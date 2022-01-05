@@ -1,0 +1,38 @@
+span.writing {
+  color: var(--color-purple-3);
+}
+span.editing {
+  color: var(--color-hot-pink);
+}
+span.close {
+  color: var(--color-teal);
+}
+span.ready {
+  color: var(--color-green);
+}
+span.submitted {
+  color: var(--color-shadowy-gold);
+}
+span.done {
+  color: var(--color-magic-gold);
+}
+
+span.waiting {
+  -webkit-text-fill-color: var(--shadow-primary);
+  -webkit-text-stroke: calc(var(--editor-font-size) * 0.0375) var(--text-normal);
+}
+span.waiting.writing {
+  -webkit-text-stroke-color: var(--color-purple-3);
+}
+span.waiting.editing {
+  -webkit-text-stroke-color: var(--color-hot-pink);
+}
+span.waiting.close {
+  -webkit-text-stroke-color: var(--color-teal);
+}
+span.waiting.ready {
+  -webkit-text-stroke-color: var(--color-green);
+}
+span.waiting.submitted {
+  -webkit-text-stroke-color: var(--color-shadowy-gold);
+}
