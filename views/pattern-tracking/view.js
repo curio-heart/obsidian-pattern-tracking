@@ -1,5 +1,5 @@
 /**
- * Pattern Tracking v0.2.0
+ * Pattern Tracking v0.3.0
  * Automated tracking for story progress based on location and link data.
  */
 
@@ -8,27 +8,44 @@
  */
 // const input = {
 //   filter: '-"~META"',
-//   typekey: 'Type',
-//   type: 'story',
-//   subtypekey: 'Subtype',
-//   subtypes: ['side-story', 'thought']
+//   typeKeys: {
+//     t: 'Type',
+//     st: 'Subtype'
+//   },
+//   types: {
+//     primary: 'story',
+//     subtypes: ['side-story', 'thought']
+//   },
+//   stageNames: {
+//     stage1: 'writing',
+//     stage2: 'editing',
+//     stage3: 'close',
+//     stage4: 'ready',
+//     stage5: 'submitted',
+//     stage6: 'done',
+//     stagewaiting: 'waiting',
+//   },
+//   patternLocations: {
+//     notReady: 'WIP',
+//     ready: null
+//   }
 // }
   
- class Pattern {
-  constructor(_filterString, _typeKey, _type, _subtypeKey, _subtypes) {
+class Pattern {
+  constructor(_filterString, _typeKeys, _types, _stages, _locations) {
     this._m = {
       filter: _filterString,
-      typeKey: _typeKey,
-      type: _type,
-      subtypeKey: _subtypeKey,
-      subtypes: _subtypes
+      typeKeys: _typeKeys,
+      types: _types,
+      stages: _stages,
+      locations: _locations // unused for now
     }
     
-    this.ALL = dv.pages(this._m.filter).where(s => s[this._m.typeKey] === this._m.type)
-    if (this._m.subtypeKey) {
-      this.primary = this.ALL.where(s => s[this._m.subtypeKey] == null)
-      for (let subtype of this._m.subtypes) {
-        this[subtype] = this.ALL.where(s => s[this._m.subtypeKey] === subtype)
+    this.ALL = dv.pages(this._m.filter).where(s => s[this._m.typeKeys.t] === this._m.types.primary)
+    if (this._m.typeKeys.st) {
+      this.primary = this.ALL.where(s => s[this._m.typeKeys.st] == null)
+      for (let subtype of this._m.types.subtypes) {
+        this[subtype] = this.ALL.where(s => s[this._m.typeKeys.st] === subtype)
       }
     }
   }
@@ -65,7 +82,7 @@
     
     let hasAny = false
 
-    let subtypes = _subtypes ? _subtypes : this._m.subtypes
+    let subtypes = _subtypes ? _subtypes : this._m.types.subtypes
     
     for (let st of subtypes) {
       hasAny = c[st].size ? c[st].size > 0 : false
@@ -81,7 +98,7 @@
   * @param {Page} _src Source data
   */
   mergeConnections(_dest, _src) {
-    for (let st of this._m.subtypes) {
+    for (let st of this._m.types.subtypes) {
       if (_src.connections[st].size > 0) {
         _src.connections[st].forEach(s => _dest.connections[st].add(s))
       }
@@ -96,7 +113,7 @@
   setConnections(_file, _parent) {
     if (!_file.connections) {
       _file.connections = {}
-      for (let st of this._m.subtypes) {
+      for (let st of this._m.types.subtypes) {
         _file.connections[st] = new Set()
       }
     }
@@ -105,7 +122,7 @@
       let p = dv.page(f)
       
       // check each linked page for page.Subtype to be `side-story` or `thought`
-      for (let st of this._m.subtypes) {
+      for (let st of this._m.types.subtypes) {
         if (p.Subtype === st) _file.connections[st].add(f)
       }
       if (p.outlinks != null && p.outlinks !== []) {
@@ -170,7 +187,7 @@
     let connected = this.hasConnections(_file)
     if (!connected) {
       status = 'close'
-    } else if (connected && _file.connections[this._m.subtypes[1]].size === 0) {
+    } else if (connected && _file.connections[this._m.types.subtypes[1]].size === 0) {
       status = 'ready'
     } if (connected && (publish === true || publish === 'yes' || publish === 'published')) {
       status = 'done'
@@ -181,7 +198,7 @@
   }
 }
   
-let pattern = new Pattern(input.filter, input.typekey, input.type, input.subtypekey, input.subtypes)
+let pattern = new Pattern(input.filter, input.typeKeys, input.types, input.stageNames, input.locations)
 
 pattern.prep()
 
@@ -205,7 +222,7 @@ dv.table(
       s.Subtype ? s.Subtype : s.Type,
       pattern.getWaitingTime(s),
       `<span class="${pattern.getStatus(s)} ${pattern.isWaiting(s)}">\u2766</span>`,
-      s.connections[pattern._m.subtypes[0]].size,
-      s.connections[pattern._m.subtypes[1]].size
+      s.connections[pattern._m.types.subtypes[0]].size,
+      s.connections[pattern._m.types.subtypes[1]].size
     ])
 )

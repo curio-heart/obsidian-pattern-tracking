@@ -10,7 +10,7 @@ Incidentally, that's also the motivation for why I started making this. I use da
 
 However, I didn't really have a way to track their status. I tried to add in a status property for this, but rarely updated it; enough files don't even have it to safely say that I don't actually use it. By the end of 2021, it was pretty clear to me that I needed a way to fix this.
 
-Rather than trying to figure out how to change my process, however, I wanted something to work _with_ it. Something that could use my activity to help estimate the status of a story based on patterns of activity. 
+Rather than trying to figure out how to change my process, however, I wanted something to work _with_ it. Something that could use my activity to help estimate the status of a story based on patterns of activity.
 
 Something that didn't need me to change what I'm doing to offer me some insight into their status.
 
