@@ -50,7 +50,7 @@ Please note that, for now, pattern-tracking expects two subtypes, and provides n
 
 For Nowᵀᴹ, the logic depends on some things that I'll decouple from my process as soon as possible:
 
-1. The status names and their respective colors are hard-coded in. (The colors also reference ones from my theme for now.)
+1. The status ~~names and their respective~~ colors are hard-coded in. (The colors also reference ones from my theme for now.) UPDATE: Stage names (used for the status) are now configurable!
 2. Not Ready status is determined by the file's location in a `WIP` folder by default.
 3. Any folder can be the Ready location.
 4. Both subtypes can determine the Not Ready stage.
@@ -66,10 +66,27 @@ Note: Remove the backslashes from the copied code for a working dataviewjs block
 \`\`\`dataviewjs
 const input = {
   filter: '-"~META"',
-  typeKey: 'Type',
-  type: 'story',
-  subtypeKey: 'Subtype',
-  subtypes: ['side-story', 'thought']
+  typeKeys: {
+    t: 'Type',
+    st: 'Subtype'
+  },
+  types: {
+    primary: 'story',
+    subtypes: ['side-story', 'thought']
+  },
+  stageNames: {
+    stage1: 'writing',
+    stage2: 'editing',
+    stage3: 'close',
+    stage4: 'ready',
+    stage5: 'submitted',
+    stage6: 'done',
+    stagewaiting: 'waiting',
+  },
+  patternLocations: { // currently not used; will fix soon!
+    notReady: 'WIP',
+    ready: null
+  }
 }
 
 dv.view('path/to/pattern-tracking', input)
