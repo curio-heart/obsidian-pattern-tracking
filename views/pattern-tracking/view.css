@@ -1,38 +1,39 @@
-span.writing {
+span.stage1 {
   color: var(--color-purple-3);
 }
-span.editing {
+span.stage2 {
   color: var(--color-hot-pink);
 }
-span.close {
+span.stage3 {
   color: var(--color-teal);
 }
-span.ready {
+span.stage4 {
   color: var(--color-green);
 }
-span.submitted {
+span.stage5 {
   color: var(--color-shadowy-gold);
 }
-span.done {
+span.stage6 {
   color: var(--color-magic-gold);
 }
 
-span.waiting {
+span.stagewaiting {
   -webkit-text-fill-color: var(--shadow-primary);
-  -webkit-text-stroke: calc(var(--editor-font-size) * 0.0375) var(--text-normal);
+  -webkit-text-stroke-width: calc(var(--editor-font-size) * 0.0375);
+  -webkit-text-stroke-color: var(--text-normal);
 }
-span.waiting.writing {
+span.stagewaiting.stage1 {
   -webkit-text-stroke-color: var(--color-purple-3);
 }
-span.waiting.editing {
+span.stagewaiting.stage2 {
   -webkit-text-stroke-color: var(--color-hot-pink);
 }
-span.waiting.close {
+span.stagewaiting.stage3 {
   -webkit-text-stroke-color: var(--color-teal);
 }
-span.waiting.ready {
+span.stagewaiting.stage4 {
   -webkit-text-stroke-color: var(--color-green);
 }
-span.waiting.submitted {
+span.stagewaiting.stage5 {
   -webkit-text-stroke-color: var(--color-shadowy-gold);
 }

@@ -158,25 +158,25 @@ class Pattern {
   */
   isWaiting(_file) {
   // don't apply waiting status to completely finished items
-    return this.getStatus(_file) !== 'done' && this.getWaitingTime(_file) >= 4 ? 'waiting' : ''
+    return this.getStatus(_file) !== 'done' && this.getWaitingTime(_file) >= 4 ? 'stagewaiting' : ''
   }
   
   getStatus(_file) {
     let status = 'needs attention'
     if (_file.file.path.contains('WIP')) {
-      status = this.getIncompleteStatus(_file)
+      status = this.getNotReadyStatus(_file)
     } else {
       status = this.getReadyStatus(_file)
     }
     return status
   }
   
-  getIncompleteStatus(_file) {
+  getNotReadyStatus(_file) {
     let status = 'incomplete'
     if (this.hasConnections(_file)) {
-      status = 'editing'
+      status = this.stageLookup('stage2')
     } else {
-      status = 'writing'
+      status = this.stageLookup('stage1')
     }
     return status
   }
@@ -186,23 +186,44 @@ class Pattern {
     let status = 'almost there'
     let connected = this.hasConnections(_file)
     if (!connected) {
-      status = 'close'
+      status = this.stageLookup('stage3')
     } else if (connected && _file.connections[this._m.types.subtypes[1]].size === 0) {
-      status = 'ready'
+      status = this.stageLookup('stage4')
     } if (connected && (publish === true || publish === 'yes' || publish === 'published')) {
-      status = 'done'
+      status = this.stageLookup('stage6')
     } else if (connected && publish === 'submitted') {
-      status = publish
+      status = this.stageLookup('stage5')
     }
     return status
   }
+
+  stageLookup(_stage, _reverseLookup) {
+    let s
+    if (!_reverseLookup) {
+      s = this._m.stages[_stage]
+    } else {
+      for (let [stage, name] of Object.entries(this._m.stages)) {
+        if (name === _stage) {
+          s = stage
+          break
+        }
+      }
+    }
+    return s
+  }
+
+  getStageFromStatus(_file) {
+    let status = this.getStatus(_file)
+    let stage = this.stageLookup(status, true)
+    return stage
+  }
 }
   
-let pattern = new Pattern(input.filter, input.typeKeys, input.types, input.stageNames, input.locations)
+let pattern = new Pattern(input.filter, input.typeKeys, input.types, input.stageNames, input.patternLocations)
 
 pattern.prep()
 
-dv.paragraph(`**Color Key:** <span class="writing">Writing</span>; <span class="editing">Editing</span>; <span class="close">Close</span>; <span class="ready">Ready</span>; <span class="submitted">Submitted</span>; <span class="done">Done</span>; <span class="waiting">Waiting</span>`)
+dv.paragraph(`**Color Key:** <span class="stage1">${pattern.stageLookup('stage1')}</span>; <span class="stage2">${pattern.stageLookup('stage2')}</span>; <span class="stage3">${pattern.stageLookup('stage3')}</span>; <span class="stage4">${pattern.stageLookup('stage4')}</span>; <span class="stage5">${pattern.stageLookup('stage5')}</span>; <span class="stage6">${pattern.stageLookup('stage6')}</span>; <span class="stagewaiting">${pattern.stageLookup('stagewaiting')}</span>`)
 dv.paragraph(`**Symbol Key:** γ—Type; λ-Days since modified; Δ—Status; Ψ—Branches; ῼ—Thoughts`)
 
 dv.header(2, "All Stories")
@@ -221,7 +242,7 @@ dv.table(
       s.file.link,
       s.Subtype ? s.Subtype : s.Type,
       pattern.getWaitingTime(s),
-      `<span class="${pattern.getStatus(s)} ${pattern.isWaiting(s)}">\u2766</span>`,
+      `<span class="${pattern.getStageFromStatus(s)} ${pattern.isWaiting(s)}">\u2766</span>`,
       s.connections[pattern._m.types.subtypes[0]].size,
       s.connections[pattern._m.types.subtypes[1]].size
     ])
