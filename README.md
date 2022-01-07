@@ -2,6 +2,8 @@
 
 > Track progress through patterns of activity
 
+![Pattern Tracking preview](./img/View%20Preview.png "Pattern Tracking preview")
+
 Life is weird. So is managing what we're doing and what we've accomplished.
 
 I don't know about you, but personally, I can't _stand_ manually tracking everything. Sure, it doesn't take long to do, but for me, it always seems to take _far_ too much time away from what I'm **trying** to track—like current progress on my stories.
@@ -36,6 +38,7 @@ With pattern-tracking installed in your vault, you can start making use of it! A
 
 ```js
 const input = {
+  title: 'All Stories',
   filter: '-"~META"',
   typeKeys: {
     t: 'Type',
@@ -82,6 +85,7 @@ Note: Remove the backslashes from the copied code for a working dataviewjs block
 ```js
 \`\`\`dataviewjs
 const input = {
+  title: 'All Stories',
   filter: '-"~META"',
   typeKeys: {
     t: 'Type',
