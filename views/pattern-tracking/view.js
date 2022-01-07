@@ -234,7 +234,7 @@ class Pattern {
   }
 }
   
-let pattern = new Pattern(input.filter, input.typeKeys, input.types, input.stageNames, input.patternLocations)
+let pattern = new Pattern(input.title, input.filter, input.typeKeys, input.types, input.stageNames, input.patternLocations)
 
 pattern.prep()
 
