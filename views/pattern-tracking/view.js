@@ -239,15 +239,15 @@ let pattern = new Pattern(input.title, input.filter, input.typeKeys, input.types
 pattern.prep()
 
 dv.paragraph(`**Color Key:** <span class="stage1">${pattern.stageLookup('stage1')}</span>; <span class="stage2">${pattern.stageLookup('stage2')}</span>; <span class="stage3">${pattern.stageLookup('stage3')}</span>; <span class="stage4">${pattern.stageLookup('stage4')}</span>; <span class="stage5">${pattern.stageLookup('stage5')}</span>; <span class="stage6">${pattern.stageLookup('stage6')}</span>; <span class="stagewaiting">${pattern.stageLookup('stagewaiting')}</span>`)
-dv.paragraph(`**Symbol Key:** γ—Type; λ-Days since modified; Δ—Status; Ψ—Branches; ῼ—Thoughts`)
+dv.paragraph(`**Symbol Key:** γ—Type; Δ-Days since modified; λ—Status; Ψ—Branches; ῼ—Thoughts`)
 
 dv.header(2, pattern.getTitle())
 dv.table(
   [
     "Title",
     "γ",
-    "λ",
     "Δ",
+    "λ",
     "Ψ",
     "ῼ"
   ],
