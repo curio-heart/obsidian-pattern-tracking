@@ -37,10 +37,27 @@ With pattern-tracking installed in your vault, you can start making use of it! A
 ```js
 const input = {
   filter: '-"~META"',
-  typeKey: 'Type',
-  type: 'story',
-  subtypeKey: 'Subtype',
-  subtypes: ['side-story', 'thought']
+  typeKeys: {
+    t: 'Type',
+    st: 'Subtype'
+  },
+  types: {
+    primary: 'story',
+    subtypes: ['side-story', 'thought']
+  },
+  stageNames: {
+    stage1: 'writing',
+    stage2: 'editing',
+    stage3: 'close',
+    stage4: 'ready',
+    stage5: 'submitted',
+    stage6: 'done',
+    stagewaiting: 'waiting',
+  },
+  patternLocations: {
+    notReady: 'WIP',
+    ready: null
+  }
 }
 ```
 
@@ -50,9 +67,9 @@ Please note that, for now, pattern-tracking expects two subtypes, and provides n
 
 For Nowᵀᴹ, the logic depends on some things that I'll decouple from my process as soon as possible:
 
-1. The status ~~names and their respective~~ colors are hard-coded in. (The colors also reference ones from my theme for now.) UPDATE: Stage names (used for the status) are now configurable!
-2. Not Ready status is determined by the file's location in a `WIP` folder by default.
-3. Any folder can be the Ready location.
+1. ~~The status names and their respective colors are hard-coded in. (The colors also reference ones from my theme for now.)~~ UPDATE: Stage names (used for the status) are now configurable!
+2. ~~Not Ready status is determined by the file's location in a `WIP` folder by default.~~ Not Ready status is still determined by location. The location is configurable now, however.
+3. ~~Any folder can be the Ready location.~~ The location used for Ready status can be configured.
 4. Both subtypes can determine the Not Ready stage.
 5. Only the second subtype is used to determine the Ready stage.
 
@@ -83,7 +100,7 @@ const input = {
     stage6: 'done',
     stagewaiting: 'waiting',
   },
-  patternLocations: { // currently not used; will fix soon!
+  patternLocations: {
     notReady: 'WIP',
     ready: null
   }
