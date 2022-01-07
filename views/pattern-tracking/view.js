@@ -7,6 +7,7 @@
  *  Uncomment this section and replace the data with what you need!
  */
 // const input = {
+//   title: 'All Stories',
 //   filter: '-"~META"',
 //   typeKeys: {
 //     t: 'Type',
@@ -32,8 +33,9 @@
 // }
   
 class Pattern {
-  constructor(_filterString, _typeKeys, _types, _stages, _locations) {
+  constructor(_patternTitle, _filterString, _typeKeys, _types, _stages, _locations) {
     this._m = {
+      title: _patternTitle,
       filter: _filterString,
       typeKeys: _typeKeys,
       types: _types,
@@ -226,6 +228,10 @@ class Pattern {
     let stage = this.stageLookup(status, true)
     return stage
   }
+
+  getTitle() {
+    return this._m.title
+  }
 }
   
 let pattern = new Pattern(input.filter, input.typeKeys, input.types, input.stageNames, input.patternLocations)
@@ -235,7 +241,7 @@ pattern.prep()
 dv.paragraph(`**Color Key:** <span class="stage1">${pattern.stageLookup('stage1')}</span>; <span class="stage2">${pattern.stageLookup('stage2')}</span>; <span class="stage3">${pattern.stageLookup('stage3')}</span>; <span class="stage4">${pattern.stageLookup('stage4')}</span>; <span class="stage5">${pattern.stageLookup('stage5')}</span>; <span class="stage6">${pattern.stageLookup('stage6')}</span>; <span class="stagewaiting">${pattern.stageLookup('stagewaiting')}</span>`)
 dv.paragraph(`**Symbol Key:** γ—Type; λ-Days since modified; Δ—Status; Ψ—Branches; ῼ—Thoughts`)
 
-dv.header(2, "All Stories")
+dv.header(2, pattern.getTitle())
 dv.table(
   [
     "Title",
