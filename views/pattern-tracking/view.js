@@ -163,11 +163,20 @@ class Pattern {
   
   getStatus(_file) {
     let status = 'needs attention'
-    if (_file.file.path.contains('WIP')) {
-      status = this.getNotReadyStatus(_file)
-    } else {
-      status = this.getReadyStatus(_file)
-    }
+    let fPath = _file.file.path
+    if (this._m.locations.notReady) {
+      if (fPath.contains(this._m.locations.notReady)) {
+        status = this.getNotReadyStatus(_file)
+      } else {
+        status = this.getReadyStatus(_file)
+      }
+    } else if (this._m.locations.ready) {
+      if (fPath.contains(this._m.locations.ready)) {
+        status = this.getReadyStatus(_file)
+      } else {
+        status = this.getNotReadyStatus(_file)
+      }
+    } 
     return status
   }
   
