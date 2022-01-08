@@ -11,7 +11,8 @@
 //   filter: '-"~META"',
 //   typeKeys: {
 //     t: 'Type',
-//     st: 'Subtype'
+//     st: 'Subtype',
+//     d: 'publish'
 //   },
 //   types: {
 //     primary: 'story',
@@ -40,14 +41,18 @@ class Pattern {
       typeKeys: _typeKeys,
       types: _types,
       stages: _stages,
-      locations: _locations // unused for now
+      locations: _locations,
+      status: null
+    }
+    this._d = {
+      ALL: null
     }
     
-    this.ALL = dv.pages(this._m.filter).where(s => s[this._m.typeKeys.t] === this._m.types.primary)
+    this._d.ALL = dv.pages(this._m.filter).where(s => s[this._m.typeKeys.t] === this._m.types.primary)
     if (this._m.typeKeys.st) {
-      this.primary = this.ALL.where(s => s[this._m.typeKeys.st] == null)
+      this._d.primary = this._d.ALL.where(s => s[this._m.typeKeys.st] == null)
       for (let subtype of this._m.types.subtypes) {
-        this[subtype] = this.ALL.where(s => s[this._m.typeKeys.st] === subtype)
+        this._d[subtype] = this._d.ALL.where(s => s[this._m.typeKeys.st] === subtype)
       }
     }
   }
@@ -56,7 +61,7 @@ class Pattern {
   * Sets needed metadata for the dataset.
   */
   prep = () => {
-    for (let page of this.ALL) {
+    for (let page of this._d.ALL) {
       this.setConnections(page)
       this.setWaitingTime(page)
     }
@@ -69,7 +74,7 @@ class Pattern {
   */
   getFilesOfType(_subtype) {
     const type = _subtype != null ? _subtype : 'primary'
-    return this[type]
+    return this._d[type]
   }
   
   /**
@@ -239,7 +244,7 @@ let pattern = new Pattern(input.title, input.filter, input.typeKeys, input.types
 pattern.prep()
 
 dv.paragraph(`**Color Key:** <span class="stage1">${pattern.stageLookup('stage1')}</span>; <span class="stage2">${pattern.stageLookup('stage2')}</span>; <span class="stage3">${pattern.stageLookup('stage3')}</span>; <span class="stage4">${pattern.stageLookup('stage4')}</span>; <span class="stage5">${pattern.stageLookup('stage5')}</span>; <span class="stage6">${pattern.stageLookup('stage6')}</span>; <span class="stagewaiting">${pattern.stageLookup('stagewaiting')}</span>`)
-dv.paragraph(`**Symbol Key:** γ—Type; Δ-Days since modified; λ—Status; Ψ—Branches; ῼ—Thoughts`)
+dv.paragraph(`**Symbol Key:** γ—Type; Δ-Days since modified; λ—Status; Ψ—${input.types.subtypes[0]}; ῼ—${input.types.subtypes[1]}`)
 
 dv.header(2, pattern.getTitle())
 dv.table(
