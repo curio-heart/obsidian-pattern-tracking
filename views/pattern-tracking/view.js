@@ -41,8 +41,7 @@ class Pattern {
       typeKeys: _typeKeys,
       types: _types,
       stages: _stages,
-      locations: _locations,
-      status: null
+      locations: _locations
     }
     this._d = {
       ALL: null
@@ -63,6 +62,7 @@ class Pattern {
   prep = () => {
     for (let page of this._d.ALL) {
       this.setConnections(page)
+      this.setStatus(page)
       this.setWaitingTime(page)
     }
   }
@@ -81,7 +81,7 @@ class Pattern {
   * Checks if a given page has connections of any subtypes.
   * @param {Page} _page The page to check
   * @param {Array<string>} _subtypes (optional) Which subtypes to check, or all if not provided
-  * @returns `true` if the story contains at least one of any subtypes provided, or false otherwise.
+  * @returns `true` if the story contains at least one of any subtypes provided, or `false` otherwise.
   */
   hasConnections(_page, _subtypes) {
     let c = _page.connections
@@ -167,8 +167,8 @@ class Pattern {
   // don't apply waiting status to completely finished items
     return this.getStatus(_file) !== 'done' && this.getWaitingTime(_file) >= 4 ? 'stagewaiting' : ''
   }
-  
-  getStatus(_file) {
+
+  setStatus(_file) {
     let status = 'needs attention'
     let fPath = _file.file.path
     if (this._m.locations.notReady) {
@@ -184,7 +184,11 @@ class Pattern {
         status = this.getNotReadyStatus(_file)
       }
     } 
-    return status
+    _file.status = status
+  }
+  
+  getStatus(_file) {
+    return _file.status
   }
   
   getNotReadyStatus(_file) {
